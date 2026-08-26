@@ -55,6 +55,63 @@ A correction blockquote that is not struck through reads as present tense
 forever. If your vault uses dated correction blocks, check that superseded
 ones carry `~~` and a pointer to what superseded them.
 
+### 7. Anchors that cannot be silenced
+
+A check that greps for a claim pattern has a blind spot: **delete the
+sentence and the check goes quiet** — and quiet prints exactly like green.
+For claims that must keep existing (a coverage figure, a served-artifact
+relation), give the check a `requires_site` mode: if the anchor phrase no
+longer matches anywhere, that is itself a red — "the claim disappeared", not
+"nothing to check". We added this after watching the legitimate fix for a
+stale claim be deleting it, which would have killed the check in silence.
+
+### 8. The accidental second assertion site
+
+The dual failure: a *new* note innocently writes a phrase that matches an
+existing anchor ("31 pytest tests" in a status update), and from that moment
+the vault has two assertion sites to keep synchronized forever. Cheap
+mitigation, worth its cost: before writing a figure into any note, check it
+against the anchor patterns; cite the assertion site instead of repeating the
+number. If your vault renders in Obsidian, a `[[state/...]]` wikilink is the
+natural citation form.
+
+## Runner discipline
+
+**Discover, don't enumerate.** The runner finds its suites and checks by
+glob, so a new suite enters the gate the day it is written, with no list to
+update. Every enumerated list of instruments we kept aged the day the next
+instrument was born. Corollary: the rows the runner prints ARE the living
+list — a skill or doc that names individual commands will rot; teach readers
+to read the printed rows instead.
+
+**Measure the exit code without a pipe.** `ruby x.rb | tail` returns the exit
+code of `tail`. If you are going to cite an exit code, run the command bare.
+
+## The negative proof
+
+The check catalog above defends against the world drifting. This defends
+against the *fixer*: after correcting a claim, **break it by hand, confirm
+the instrument goes red, restore it.** If breaking the claim leaves the run
+green, the correction did not fix anything — it moved the text out of the
+anchor's reach, which is the one editing failure no reviewer can see in a
+diff. One negative proof per corrected claim, every time. It is the only
+defense against a green nobody earned.
+
+## Perimeter guards: forbid the act, not the name
+
+A no-network gate that stubs helpers by name (`http_get`, `fetch`, `rpc`…)
+is a guard per name — and a new code path that calls the transport directly
+walks past every stub at once. Close it one level down, where there is no
+name to guess: forbid **opening a socket** in no-network suites (in Ruby,
+raise from the socket layer via a preloaded file; in Rails, WebMock's
+`disable_net_connect!` is the same idea). Ours exists because logic coverage
+grew from 23 tests to 700+ while the perimeter didn't move.
+
+Write down what the guard does NOT cover — a suite that shells out to `curl`
+opens its socket in another process, past the gate. A named gap beats a
+pretended completeness; that sentence in the guard's own header is part of
+the guard.
+
 ## World audit (network)
 
 ### Deriving measurements

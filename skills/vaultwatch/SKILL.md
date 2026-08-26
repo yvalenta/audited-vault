@@ -62,7 +62,9 @@ error was actually paid. Seed the folder with nothing; the first incident
 funds the first law. (The universal ones tend to arrive fast: *never write
 the number a run WILL print — run it, then write what it printed*; *what you
 serve matters more than what you wrote*; *every hand-copied constant is one
-more place to desynchronize*.)
+more place to desynchronize*.) The generalizable laws our vaults earned
+later — to recognize when they bite, not to copy unearned — are in
+[references/laws-paid.md](references/laws-paid.md).
 
 **`history/` — where closed arcs go.** When a piece of work closes, its whole
 narrative block moves here and **one line** stays in HANDOFF.md. A HANDOFF
@@ -70,7 +72,11 @@ that accumulates closed blocks is how a 2,600-line file that produced its own
 lies happens.
 
 **`HANDOFF.md` — the cold-start door.** What exists, what works, what is
-broken, what decisions are pending. No figures — link to `state/` instead.
+broken, what decisions are pending — and a short **"what can be done now"
+table: the vault's future layer, and the only place direction lives.** It
+exists because a red finding usually has an obvious fix, and the obvious fix
+is often wrong for where the project is going; whoever fixes must know the
+direction *before* measuring. No figures — link to `state/` instead.
 Two formatting rules that sound cosmetic and are not: a correction blockquote
 that is not struck through **reads as present tense** (when superseded,
 strike it with `~~…~~` and say what superseded it); and blockquotes go after
@@ -102,6 +108,13 @@ Minimum checks — the full catalog with implementation notes is in
 Wire it so it runs **before every session and in CI on every push**. It needs
 no network, so there is no excuse for it not to.
 
+Two mechanics that keep the instrument honest as it grows (details in the
+catalog): the runner **discovers** its checks and suites by glob — an
+enumerated list ages the day the next suite is born, and the rows the runner
+prints are the living list; and the anchors that latch onto claims should be
+able to **fail when the claim disappears**, because otherwise deleting a
+sentence silences the check, and silence looks identical to green.
+
 ## Step 3 — The world audit (network)
 
 Write `audit_world`: for every claim in `state/`, derive a measurement and
@@ -131,17 +144,87 @@ resolution to be more careful.
 
 ## Step 4 — The ritual (Rule #1)
 
-Before working: **run both audits, then read.** The audits say whether the
-vault can be trusted this session.
+**Read the door first, then measure.** Open HANDOFF.md — what exists, what is
+broken, and the "what can be done now" table — *before* running anything.
+Note the contradictions you spot while reading; do not fix them yet. The
+order matters twice over: the obvious fix for a red is often wrong for where
+the project is going, and correcting before measuring is exactly how several
+of our 37 lies were produced. Then run both audits.
 
-After working: **list what the session changed in the world** (deploys,
-published content, config, purchases) → **fix every vault claim those changes
-made false, at its assertion site** → **re-run both audits with the fixes in
-place** → **commit vault and code together.** No commit — didn't happen: the
-next session starts blind.
+**Classify a red by class, not by row** — each class has a different owner:
 
-Never end a session red. And never write what a run *will* say — run it,
-then write what it said.
+| The red says | Class | Who acts |
+|---|---|---|
+| the vault contradicts itself or the disk | coherence | this session fixes the doc |
+| the vault drifted from the world | world audit | this session — unless the world actually broke |
+| code broke | test suite | report and stop; that is a work session |
+| an artifact no longer derives from its source | derivation check | say it loudly — that blocks a deploy |
+| an external invariant fell | probe | almost never documentation |
+
+**A red that does not reproduce is investigated, not corrected.** Re-run the
+failed instrument once before touching any file — a network flake prints the
+same red as a real drift. And retry only on connection failure: a 500 that
+flips to 200 on retry is a finding, not a flake.
+
+**Fix at assertion sites**, then **prove every fix with a negative proof**:
+break the corrected claim by hand, confirm the instrument goes red, restore
+it. The real failure mode of "edit docs until the auditor is quiet" is not
+writing badly — it is moving the text out of the anchor's reach, and the
+resulting silence looks identical to green. A correction without its negative
+proof is just one more unmeasured assertion.
+
+**Cap: three rounds.** A red that survives three correction rounds is no
+longer the documentation — it is the world, or the instrument. Stop and say
+so; the fourth insistence is how a red becomes a false green.
+
+**Then close**: list what the session changed in the world (deploys,
+published content, config, purchases) → fix every vault claim those changes
+made false → re-run both audits with the fixes in place → commit. What gets
+committed depends on how the tree was found:
+
+| The tree was | Do |
+|---|---|
+| clean | commit your changes |
+| dirty and **green** | commit only yours; list what was pending, untouched |
+| dirty and **red** | **do not commit** — list it and stop |
+
+No commit — didn't happen: the next session starts blind. Never end a
+session red. And never write what a run *will* say — run it, then write what
+it said.
+
+## Touching an instrument — loosening vs changing the unit
+
+Sooner or later a guard itself becomes the problem, and the distinction that
+decides what is allowed is **loosening vs changing the unit**.
+
+**Loosening is forbidden, always**: deleting an assertion so a check goes
+quiet, widening a regex until it matches anything, lowering a threshold,
+removing a row. All of it turns red into silence, and silence looks identical
+to green.
+
+**Changing the unit or the map is legitimate** when the question the
+instrument asked has stopped making sense — under three tests, all three:
+
+1. **Does the demand rise, or at least hold?** If it drops, no.
+2. **Is there a negative proof?** Without it you don't know whether you fixed
+   the check or moved the claim out of its reach.
+3. **Is the hole that remains written down?** A named hole beats a covered one.
+
+Even then: **not alone.** Show the red, name the proposed change, argue why
+the demand rises, and ask. An agent that can declare "the bar goes up" can
+rationalize almost any edit to an auditor — deciding that is exactly the
+judgment this rule exists not to delegate.
+
+## Step 5 — Ship the cold-start skill
+
+The ritual only survives if a cold session runs it without being told. Package
+it as a **repo-local skill** (e.g. `/contexto`, or whatever fits the repo):
+read in order, measure, classify, fix, prove, commit, and answer with an
+**earned "ok"** — a short table whose figures come from this session's runs,
+never from memory or from the doc. The full template, including the No-list
+(what a context session never does: run anything that writes to the world,
+fix code, delete worktrees, touch an instrument without asking, invent a
+figure), is in [references/contexto-skill.md](references/contexto-skill.md).
 
 ## Multi-project shape
 

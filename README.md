@@ -233,9 +233,47 @@ Our auditor caught a "spec is not published yet" claim that had been false for a
 
 That's the failure mode no note-vs-note check can see.
 
+## What The Method Learned Since
+
+The system above kept running after this article was written. It kept paying tuition. The upgrades, in the order they cost us:
+
+**Read the direction before you measure.** The HANDOFF carries a short "what can be done now" table — the only place *where this is going* lives. Read it before running the auditors: the obvious fix for a red is often wrong for where the project is going, and by the time you've written it, it's too late.
+
+**The negative proof.** For every claim you correct: break it by hand, confirm the auditor goes red, restore it. The real failure of "edit docs until the auditor is quiet" isn't bad writing — it's moving the text out of the anchor's reach. The check goes silent, and **silence prints exactly like green.**
+
+**Reds have classes, not just rows.** The doc contradicts itself → fix the doc. The doc drifted from the world → fix the doc, unless the world actually broke. Code broke → that's a work session, not a doc session. Knowing which red is whose is half the ritual.
+
+**A red that doesn't reproduce is investigated, not corrected.** Re-run once before touching anything. And three rounds is the cap: a red that survives three correction rounds is the world or the instrument, not the documentation.
+
+**Loosening a guard is forbidden; changing its unit is legitimate** — under three tests: the demand rises, there's a negative proof, and the hole that remains is written down. And never alone: an agent that can declare "the bar goes up" can rationalize almost any edit to an auditor.
+
+**Ship the ritual as a repo-local skill.** Ours is called `/contexto`: a cold session reads the doors in order, measures, fixes, proves, commits — and ends with an "ok" it *earned*, every figure from this session's runs. With an explicit No-list: never touches the world, never fixes code, never invents a number.
+
+The skill below ships all of it — the details live in its `references/`.
+
+## Prompt 5: The Cold-Start Skill
+
+```
+Task: package this vault's ritual as a repo-local skill,
+so a cold session runs it without being told.
+
+Phases: read in order (HANDOFF door + direction table FIRST,
+then state/, laws/, the lie autopsy) → run both audits →
+classify each red by class → fix docs at assertion sites →
+NEGATIVE PROOF per fix (break it, see red, restore) →
+re-run → commit (unless the tree was dirty and red).
+
+End with a short earned "ok" table — every figure from this
+session's runs, none from memory.
+
+No-list: never run anything that writes to the world, never
+fix code, never touch an auditor without asking, never
+invent a figure.
+```
+
 ## Install It As A Claude Code Skill — `vaultwatch`
 
-This repo ships the whole method as a ready-to-use skill — the four prompts above, turned into an instrument Claude applies to your repo:
+This repo ships the whole method as a ready-to-use skill — the five prompts above, turned into an instrument Claude applies to your repo:
 
 ```bash
 git clone https://github.com/yvalenta/vaultwatch
