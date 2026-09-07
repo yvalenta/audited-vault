@@ -45,6 +45,14 @@ non-reproducing reds, and the humility banner: an exit 0 proves what the
 scripts watch is still in place — nothing more. What smelled wrong in Phase 1
 still counts even if everything is green.
 
+This is the phase to delegate. A subagent on the small or mid model — named
+explicitly, never inherited — runs the gates and returns only what they
+printed: exit code, summary line, every red row verbatim. The parent never
+pays the instruments' output in its own context. Classification, correction
+and the negative proof stay with the parent: that is the judgment, and the
+measuring agent has no business making it. (See *laws-paid.md*: the
+measuring agent names its model; delegation is not free.)
+
 ## Phase 3 — Correct (documentation only)
 
 The correction rules from the skill body, plus the two locally-learned ones
